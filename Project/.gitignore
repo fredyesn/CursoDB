@@ -39,3 +39,4 @@ build/
 /spark/target/maven-status/
 /spark/target/test-classes/
 /spark/target/classes.timestamp
+/spark/target/
