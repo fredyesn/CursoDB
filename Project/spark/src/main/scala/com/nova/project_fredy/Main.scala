@@ -10,11 +10,26 @@ object Main {
       .appName("Scala Spark SQL basic example")
       .getOrCreate()
 
-    val df = spark.read
-      .option("header","true")
-      .csv("C:\\Users\\fredy.sosa\\Documents\\Cursos\\AzureDB\\Practica\\modeloRelacional\\actor.csv")
+    val dir = "C:\\Users\\fredy.sosa\\Documents\\Cursos\\AzureDB\\Practica\\modeloRelacional"
+    val files_lst = Utils.list_files(dir)
 
-    df.show(20)
+    files_lst.foreach(
+      file => {
+        println(s"Reading file: $file")
+
+        val schema = Utils.GetSchema(file)
+        val df = spark.read
+          .option("header","true")
+          .option("delimiter","|")
+          .schema(schema)
+          .csv(s"$dir\\$file")
+
+        df.printSchema()
+        df.show()
+      }
+    )
+
+
 
 
 
