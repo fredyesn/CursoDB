@@ -1,0 +1,6 @@
+init_load_dir=abfss://ext-landing@saexternalfred.dfs.core.windows.net/full_load/
+daily_load_dir=abfss://ext-landing@saexternalfred.dfs.core.windows.net/daily_load/
+monthly_load_dir=abfss://ext-landing@saexternalfred.dfs.core.windows.net/monthly_load/
+reg_historical_dir=abfss://ext-historical@saexternalfred.dfs.core.windows.net/monthly_load/
+reg_output_dir=abfss://ext-output@saexternalfred.dfs.core.windows.net/monthly_load/new/
+hist_output_dir=abfss://ext-output@saexternalfred.dfs.core.windows.net/monthly_load/historical/

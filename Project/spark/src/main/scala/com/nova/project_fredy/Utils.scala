@@ -38,4 +38,8 @@ object Utils {
       case Store.file => Store.schema
     }
   }
+
+  def read_prop_file(prop_file: String): Seq[Map[String,String]] = {
+    Seq(Map(""->""))
+  }
 }
