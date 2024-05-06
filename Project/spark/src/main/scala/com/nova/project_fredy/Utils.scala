@@ -1,12 +1,25 @@
 package com.nova.project_fredy
 
-import org.apache.spark.sql.types.StructType
 import com.nova.project_fredy.Files._
+import org.apache.spark.sql.types.StructType
+import org.apache.hadoop.fs.{FileSystem, Path}
+import org.apache.log4j.{Level, LogManager, Logger}
+import org.apache.spark.sql.SparkSession
 
 import java.nio.file.{FileSystems, Files}
 import scala.jdk.CollectionConverters.IteratorHasAsScala
 
 object Utils {
+
+  def initializeLOG(LogLevel: Level): Logger = {
+    // LOGS
+    LogManager.getRootLogger.setLevel(Level.FATAL)
+    // Spark log
+    val LOG = LogManager.getLogger(getClass.getName)
+    LOG.setLevel(LogLevel)
+
+    LOG
+  }
   def list_files(dir: String): Seq[String] = {
     val dir_ok = FileSystems.getDefault.getPath(dir)
     val dir_list = Files.list(dir_ok).iterator().asScala.map(
@@ -39,7 +52,34 @@ object Utils {
     }
   }
 
-  def read_prop_file(prop_file: String): Seq[Map[String,String]] = {
-    Seq(Map(""->""))
+  def read_prop_file(prop_file: String)(implicit spark: SparkSession): Map[String,String] = {
+    val path = new Path(prop_file)
+    println(s"prop_file: $prop_file")
+    val sc=spark.sparkContext
+    val exists_prop = FileSystem
+      .get(sc.hadoopConfiguration)
+      .exists(path)
+
+    if (!exists_prop){
+      println("Properties file does not exists\n")
+      sys.exit(1)
+    }
+
+    // reading and filtering the properties file
+    val prop_lst = sc.textFile(path.toString).collect()
+      .filter(!_.endsWith("="))
+
+    if (prop_lst.isEmpty) {
+      println("Properties file have no admisible values or is empty\n")
+      sys.exit(1)
+    }
+
+    val map: Map[String,String] = prop_lst.map(
+      x => {
+        x.split("=")(0).trim() -> x.substring(x.split("=")(0).length + 1).trim()
+      }
+    ).toMap
+
+    map
   }
 }

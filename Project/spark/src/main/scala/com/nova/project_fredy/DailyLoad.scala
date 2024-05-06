@@ -2,14 +2,15 @@ package com.nova.project_fredy
 
 import org.apache.spark.sql.SparkSession
 
-object InitialLoad {
-  def main(args: Array[String]): Unit = {
-    implicit val spark: SparkSession = SparkSession
-      .builder
-      .appName("Scala Spark SQL basic example")
-      .getOrCreate()
+object DailyLoad {
+  def run(cfg: Map[String,String])(implicit spark: SparkSession): Unit = {
+    println("\n***********************************")
+    println("**                               **")
+    println("**  Executing DailyLoad process  **")
+    println("**                               **")
+    println("***********************************\n")
 
-    val dir = "C:\\Users\\fredy\\OneDrive\\Documenten\\Fredy\\cursodatabricks0424\\Practica\\modeloRelacional"
+    val dir = cfg("daily_load_dir")
     val files_lst = Utils.list_files(dir)
 
     files_lst.foreach(
@@ -29,7 +30,5 @@ object InitialLoad {
     )
 
 
-
-    spark.close()
   }
 }
