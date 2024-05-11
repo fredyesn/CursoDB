@@ -1,6 +1,5 @@
 package com.nova.project_fredy
 
-import com.nova.project_fredy.Utils.read_prop_file
 import org.apache.spark.sql.SparkSession
 
 object FullLoad {

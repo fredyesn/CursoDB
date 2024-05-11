@@ -1,13 +1,16 @@
 package com.nova.project_fredy
 
-import com.nova.project_fredy.Files._
+import com.nova.project_fredy.FullLoadFiles._
 import org.apache.spark.sql.types.StructType
 import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.log4j.{Level, LogManager, Logger}
 import org.apache.spark.sql.SparkSession
 
 import java.nio.file.{FileSystems, Files}
-import scala.jdk.CollectionConverters.IteratorHasAsScala
+
+// deprecated in scala 2.13
+// use import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 
 object Utils {
 
@@ -20,6 +23,7 @@ object Utils {
 
     LOG
   }
+
   def list_files(dir: String): Seq[String] = {
     val dir_ok = FileSystems.getDefault.getPath(dir)
     val dir_list = Files.list(dir_ok).iterator().asScala.map(
@@ -66,7 +70,7 @@ object Utils {
     }
 
     // reading and filtering the properties file
-    val prop_lst = sc.textFile(path.toString).collect()
+    val prop_lst = sc.textFile(path.toString).collect().toSeq
       .filter(!_.endsWith("="))
 
     if (prop_lst.isEmpty) {

@@ -1,13 +1,14 @@
-package com.nova.project_fredy.Files
+package com.nova.project_fredy.FullLoadFiles
 
 import org.apache.spark.sql.types.{IntegerType, StructField, StructType, TimestampType}
 
-object FilmCategory {
-  val file = "film_category.csv"
+object Inventory {
+  val file = "inventory.csv"
 
   val schema: StructType = StructType( Array(
+    StructField("inventory_id",IntegerType,nullable = true),
     StructField("film_id",IntegerType,nullable = true),
-    StructField("category_id",IntegerType,nullable = true),
+    StructField("store_id",IntegerType,nullable = true),
     StructField("last_update",TimestampType,nullable = true)
   ))
 }

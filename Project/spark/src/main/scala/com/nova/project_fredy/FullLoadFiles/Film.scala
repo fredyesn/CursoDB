@@ -1,4 +1,4 @@
-package com.nova.project_fredy.Files
+package com.nova.project_fredy.FullLoadFiles
 
 import org.apache.spark.sql.types.{DecimalType, DoubleType, IntegerType, StringType, StructField, StructType, TimestampType}
 

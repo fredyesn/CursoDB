@@ -4,7 +4,7 @@ import com.nova.project_fredy.Utils.{initializeLOG, read_prop_file}
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.SparkSession
 
-object Main {
+object MAIN {
   val LOG: Logger = initializeLOG(Level.ALL)
 
   def main(args: Array[String]): Unit = {
