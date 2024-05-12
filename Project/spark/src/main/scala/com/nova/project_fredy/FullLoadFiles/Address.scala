@@ -5,6 +5,8 @@ import org.apache.spark.sql.types.{IntegerType, LongType, StringType, StructFiel
 object Address {
   val file = "address.csv"
 
+  val flg_part: Boolean = false
+
   val schema: StructType = StructType( Array(
     StructField("address_id",IntegerType,nullable = true),
     StructField("address",StringType,nullable = true),
@@ -15,4 +17,16 @@ object Address {
     StructField("phone",LongType,nullable = true),
     StructField("last_update",TimestampType,nullable = true)
   ))
+
+  val cmp_select =
+    s"""
+       | address_id INTEGER,
+       | address STRING,
+       | address2 STRING,
+       | district STRING,
+       | city_id INTEGER,
+       | postal_code STRING,
+       | phone BIGINT,
+       | last_update STRING
+       |""".stripMargin
 }

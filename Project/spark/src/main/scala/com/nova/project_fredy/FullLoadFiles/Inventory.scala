@@ -5,10 +5,20 @@ import org.apache.spark.sql.types.{IntegerType, StructField, StructType, Timesta
 object Inventory {
   val file = "inventory.csv"
 
+  val flg_part: Boolean = false
+
   val schema: StructType = StructType( Array(
     StructField("inventory_id",IntegerType,nullable = true),
     StructField("film_id",IntegerType,nullable = true),
     StructField("store_id",IntegerType,nullable = true),
     StructField("last_update",TimestampType,nullable = true)
   ))
+
+  val cmp_select =
+    s"""
+       | inventory_id INTEGER,
+       | film_id INTEGER,
+       | store_id INTEGER,
+       | last_update STRING
+       |""".stripMargin
 }

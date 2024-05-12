@@ -12,7 +12,7 @@ object Main {
     val execution_type = args(1)
 
     // Creating Spark Session
-    implicit val spark: SparkSession = SparkSession
+    implicit val goodSparkSession: SparkSession = SparkSession
       .builder
       .appName(s"Scala Spark Proj: $execution_type")
       .getOrCreate()
@@ -39,6 +39,6 @@ object Main {
 
 
 
-    spark.close()
+
   }
 }

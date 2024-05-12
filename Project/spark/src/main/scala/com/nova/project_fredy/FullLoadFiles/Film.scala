@@ -5,6 +5,8 @@ import org.apache.spark.sql.types.{DecimalType, DoubleType, IntegerType, StringT
 object Film {
   val file = "film.csv"
 
+  val flg_part: Boolean = false
+
   val schema: StructType = StructType( Array(
     StructField("film_id",IntegerType,nullable = true),
     StructField("title",StringType,nullable = true),
@@ -20,4 +22,21 @@ object Film {
     StructField("special_features",StringType,nullable = true),
     StructField("fulltext",StringType,nullable = true)
   ))
+
+  val cmp_select =
+    s"""
+       | film_id INTEGER,
+       | title STRING,
+       | description STRING,
+       | release_year INTEGER,
+       | language_id INTEGER,
+       | rental_duration INTEGER,
+       | rental_rate DECIMAL(7,2),
+       | length INTEGER,
+       | replacement_cost DECIMAL(10,2),
+       | rating STRING,
+       | last_update STRING,
+       | special_features STRING,
+       | fulltext STRING
+       |""".stripMargin
 }

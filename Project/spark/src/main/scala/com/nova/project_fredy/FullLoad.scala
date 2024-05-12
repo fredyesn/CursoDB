@@ -1,6 +1,9 @@
 package com.nova.project_fredy
 
+import com.nova.project_fredy.Utils.{IsEmptyDF, read_csv}
 import org.apache.spark.sql.SparkSession
+
+import scala.util.control.Breaks.{break, breakable}
 
 object FullLoad {
   def run(cfg: Map[String,String])(implicit spark: SparkSession): Unit = {
@@ -18,17 +21,24 @@ object FullLoad {
         println(s"Reading file: $file")
 
         val schema = Utils.GetSchema(file)
-        val df = spark.read
-          .option("header","true")
-          .option("delimiter","|")
-          .schema(schema)
-          .csv(s"$dir\\$file")
 
-        df.printSchema()
-        df.show(100)
+        if (schema.head.name != ""){
+          val df = read_csv(dir, file, schema)
+
+          df.printSchema()
+
+          breakable {
+            if (IsEmptyDF(df)) break
+
+            df.show(100)
+          }
+
+
+
+        } else{
+          println(s"File not included at FullLoad data ingestion: $file")
+        }
       }
     )
-
-
   }
 }

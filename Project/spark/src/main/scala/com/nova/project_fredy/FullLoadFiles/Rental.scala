@@ -5,6 +5,8 @@ import org.apache.spark.sql.types.{IntegerType, StructField, StructType, Timesta
 object Rental {
   val file = "rental.csv"
 
+  val flg_part: Boolean = false
+
   val schema: StructType = StructType( Array(
     StructField("rental_id",IntegerType,nullable = true),
     StructField("rental_date",TimestampType,nullable = true),
@@ -14,4 +16,15 @@ object Rental {
     StructField("staff_id",IntegerType,nullable = true),
     StructField("last_update",TimestampType,nullable = true)
   ))
+
+  val cmp_select =
+    s"""
+       | rental_id INTEGER,
+       | rental_date STRING,
+       | inventory_id INTEGER,
+       | customer_id INTEGER,
+       | return_date STRING,
+       | staff_id INTEGER,
+       | last_update STRING
+       |""".stripMargin
 }

@@ -1,10 +1,12 @@
 package com.nova.project_fredy
 
 import com.nova.project_fredy.FullLoadFiles._
-import org.apache.spark.sql.types.StructType
+import com.nova.project_fredy.Main.LOG
+import org.apache.spark.sql.types.{StringType, StructField, StructType, TimestampType}
 import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.log4j.{Level, LogManager, Logger}
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.{DataFrame, Row, SparkSession}
 
 import java.nio.file.{FileSystems, Files}
 
@@ -54,6 +56,7 @@ object Utils {
       case Rental.file => Rental.schema
       case Staff.file => Staff.schema
       case Store.file => Store.schema
+      case _ => StructType(Array(StructField("",StringType)))
     }
   }
 
@@ -86,5 +89,44 @@ object Utils {
     ).toMap
 
     map
+  }
+
+  def read_csv(dir: String, file: String, schema: StructType)(implicit spark: SparkSession): DataFrame = {
+    try{
+      spark.read
+        .option("header","true")
+        .option("delimiter","|")
+        .schema(schema)
+        .csv(s"$dir\\$file")
+    } catch {
+      case e: Exception =>
+        LOG.error(s"ERROR: INGEST FAILED: $file !\n")
+        LOG.error(s"ERROR: ${e.getMessage}")
+
+        EmptyDF(schema)
+    } finally {
+      LOG.info("SparkSession GENERATED !\n")
+    }
+  }
+
+  def EmptyDF(schema: StructType)(implicit spark:SparkSession): DataFrame = {
+    val rowsSeq: Seq[Row] = Seq()
+    val rowsRDD: RDD[Row] = spark.sparkContext.parallelize(rowsSeq)
+
+    spark.createDataFrame(rowsRDD, schema)
+  }
+
+  def IsEmptyDF(df: DataFrame): Boolean = {
+    df.rdd.isEmpty()
+  }
+
+  def create_table(data: Map[String,String])(implicit spark: SparkSession): Unit = {
+    spark.sql(
+      s"""
+         | CREATE TABLE ${data("database")}.${data("table")}
+         | ${Actor.cmp_select}
+         | LOCATION ${data("db_location")}.${data("table").toLowerCase()}
+         |""".stripMargin
+    )
   }
 }

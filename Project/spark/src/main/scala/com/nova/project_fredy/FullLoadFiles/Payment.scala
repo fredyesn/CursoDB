@@ -5,6 +5,8 @@ import org.apache.spark.sql.types.{DecimalType, IntegerType, StructField, Struct
 object Payment {
   val file = "payment.csv"
 
+  val flg_part: Boolean = false
+
   val schema: StructType = StructType( Array(
     StructField("payment_id",IntegerType,nullable = true),
     StructField("customer_id",IntegerType,nullable = true),
@@ -13,4 +15,14 @@ object Payment {
     StructField("amount",DecimalType(10,2),nullable = true),
     StructField("payment_date",TimestampType,nullable = true)
   ))
+
+  val cmp_select =
+    s"""
+       | payment_id INTEGER,
+       | customer_id INTEGER,
+       | staff_id INTEGER,
+       | rental_id INTEGER,
+       | amount DECIMAL(10,2),
+       | payment_date STRING
+       |""".stripMargin
 }
