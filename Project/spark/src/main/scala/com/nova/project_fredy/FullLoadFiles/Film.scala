@@ -23,7 +23,7 @@ object Film {
     StructField("fulltext",StringType,nullable = true)
   ))
 
-  val cmp_select =
+  val cmp_select: String =
     s"""
        | film_id INTEGER,
        | title STRING,

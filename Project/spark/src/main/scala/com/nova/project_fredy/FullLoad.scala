@@ -1,7 +1,9 @@
 package com.nova.project_fredy
 
 import com.nova.project_fredy.Utils.{IsEmptyDF, read_csv}
+import com.nova.project_fredy.functions.FullLoad.read_file
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.types.StructType
 
 import scala.util.control.Breaks.{break, breakable}
 
@@ -22,21 +24,18 @@ object FullLoad {
 
         val schema = Utils.GetSchema(file)
 
-        if (schema.head.name != ""){
-          val df = read_csv(dir, file, schema)
+        val df = read_file(file: String, dir: String, schema: StructType)
 
-          df.printSchema()
+        df.show(100)
 
-          breakable {
-            if (IsEmptyDF(df)) break
-
-            df.show(100)
-          }
+        // this block doesn't execute in case of empty dataframe
+        breakable {
+          if (IsEmptyDF(df)) break
 
 
 
-        } else{
-          println(s"File not included at FullLoad data ingestion: $file")
+
+
         }
       }
     )

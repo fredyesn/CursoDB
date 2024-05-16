@@ -14,7 +14,7 @@ object Store {
     StructField("last_update",TimestampType,nullable = true)
   ))
 
-  val cmp_select =
+  val cmp_select: String =
     s"""
        | store_id INTEGER,
        | manager_staff_id INTEGER,

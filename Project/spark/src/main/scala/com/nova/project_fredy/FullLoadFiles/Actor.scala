@@ -14,7 +14,7 @@ object Actor {
     StructField("last_update",TimestampType,nullable = true)
   ))
 
-  val cmp_select =
+  val cmp_select: String =
     s"""
        | actor_id INTEGER,
        | first_name STRING,

@@ -14,7 +14,7 @@ object City {
     StructField("last_update",TimestampType,nullable = true)
   ))
 
-  val cmp_select =
+  val cmp_select: String =
     s"""
        | city_id INTEGER,
        | city STRING,

@@ -13,7 +13,7 @@ object Languaje {
     StructField("last_update",TimestampType,nullable = true)
   ))
 
-  val cmp_select =
+  val cmp_select: String =
     s"""
        | language_id INTEGER,
        | name STRING,

@@ -20,7 +20,7 @@ object Customer {
     StructField("active",IntegerType,nullable = true)
   ))
 
-  val cmp_select =
+  val cmp_select: String =
     s"""
        | customer_id INTEGER,
        | store_id INTEGER,

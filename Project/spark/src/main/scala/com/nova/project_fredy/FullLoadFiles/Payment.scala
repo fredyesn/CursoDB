@@ -16,7 +16,7 @@ object Payment {
     StructField("payment_date",TimestampType,nullable = true)
   ))
 
-  val cmp_select =
+  val cmp_select: String =
     s"""
        | payment_id INTEGER,
        | customer_id INTEGER,

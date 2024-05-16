@@ -21,7 +21,7 @@ object Staff {
     StructField("picture",StringType,nullable = true)
   ))
 
-  val cmp_select =
+  val cmp_select: String =
     s"""
        | staff_id INTEGER,
        | first_name STRING,

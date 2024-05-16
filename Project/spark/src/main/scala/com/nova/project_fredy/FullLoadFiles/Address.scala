@@ -18,7 +18,7 @@ object Address {
     StructField("last_update",TimestampType,nullable = true)
   ))
 
-  val cmp_select =
+  val cmp_select: String =
     s"""
        | address_id INTEGER,
        | address STRING,
