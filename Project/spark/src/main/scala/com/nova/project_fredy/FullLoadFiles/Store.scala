@@ -2,9 +2,8 @@ package com.nova.project_fredy.FullLoadFiles
 
 import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructType, TimestampType}
 
-object Store {
-  val file = "store.csv"
-
+object Store extends File {
+  val name = "store"
   val flg_part: Boolean = false
 
   val schema: StructType = StructType( Array(

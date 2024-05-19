@@ -2,6 +2,7 @@ package com.nova.project_fredy
 
 import com.nova.project_fredy.FullLoadFiles._
 import com.nova.project_fredy.Main.LOG
+import com.nova.project_fredy.Variables.full_load_obj_lst
 import org.apache.spark.sql.types.{StringType, StructField, StructType, TimestampType}
 import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.log4j.{Level, LogManager, Logger}
@@ -37,6 +38,13 @@ object Utils {
     //dir_list.foreach(println)
 
     dir_list
+  }
+
+  def getFullLoadObj(file: String): File = {
+    var obj: File = NullFile
+    full_load_obj_lst.foreach( x => if (file == x.file) obj = x )
+
+    obj
   }
 
   def GetSchema(file: String): StructType = {
