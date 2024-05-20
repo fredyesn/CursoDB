@@ -1,5 +1,6 @@
 package com.nova.project_fredy
 
+import com.nova.project_fredy.Install.PreInstall
 import com.nova.project_fredy.Utils.{initializeLOG, read_prop_file}
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.SparkSession
@@ -10,12 +11,15 @@ object Main {
   def main(args: Array[String]): Unit = {
     val prop_file = args(0)
     val execution_type = args(1)
+    val flag_preinstall = args(2)
 
     // Creating Spark Session
     implicit val goodSparkSession: SparkSession = SparkSession
       .builder
       .appName(s"Scala Spark Proj: $execution_type")
       .getOrCreate()
+
+    if (flag_preinstall == "1") PreInstall.run()
 
     // Reading configuration file
     val cfg = read_prop_file(prop_file)
@@ -32,13 +36,6 @@ object Main {
         LOG.error(s"ERROR: ${e.getMessage}")
 
         throw e
-    } finally {
-      LOG.info("SparkSession GENERATED !\n")
     }
-
-
-
-
-
   }
 }

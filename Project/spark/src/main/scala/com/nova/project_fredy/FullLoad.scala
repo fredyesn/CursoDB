@@ -1,12 +1,11 @@
 package com.nova.project_fredy
 
 import com.nova.project_fredy.FullLoadFiles.File
-import com.nova.project_fredy.Utils.{IsEmptyDF, getFullLoadObj, read_csv}
+import com.nova.project_fredy.Utils.{IsEmptyDF, getFullLoadObj, writeParquetTable}
 import com.nova.project_fredy.functions.Common.create_parquet_table
-import com.nova.project_fredy.functions.FullLoad.read_file
-import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.types.StructType
+import com.nova.project_fredy.functions.FullLoad.{read_file, unitary_test}
 
+import org.apache.spark.sql.SparkSession
 import scala.util.control.Breaks.{break, breakable}
 
 object FullLoad {
@@ -22,25 +21,30 @@ object FullLoad {
 
     files_lst.foreach(
       file => {
-        println(s"Reading file: $file")
-
         val load_obj: File = getFullLoadObj(file)
+        val df_landing = read_file(load_obj, dir)
 
-        val df = read_file(load_obj, dir)
-
-        df.show(100)
+        df_landing.show(10)
 
         // this block doesn't execute in case of empty dataframe
         breakable {
-          if (IsEmptyDF(df)) break
+          if (IsEmptyDF(df_landing)) break
 
-          create_parquet_table(load_obj.land_table: String, load_obj.schema: StructType)
-          create_parquet_table(load_obj.business_table: String, load_obj.schema: StructType)
+          // Creating landing table
+          create_parquet_table(load_obj.land_table, load_obj.schema)
+          // Writing data into landing table
+          writeParquetTable(df_landing, load_obj.land_table)
 
+          val df_business = unitary_test(df_landing)
 
-
-
-
+          if (!IsEmptyDF(df_business)){
+            // Creating business table
+            create_parquet_table(load_obj.business_table, load_obj.schema)
+            // Writing data into business table
+            writeParquetTable(df_landing, load_obj.business_table)
+          } else{
+            println(s"There is no data to insert after validations")
+          }
         }
       }
     )

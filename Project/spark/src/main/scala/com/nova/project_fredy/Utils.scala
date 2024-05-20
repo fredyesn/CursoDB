@@ -7,14 +7,13 @@ import org.apache.spark.sql.types.{StringType, StructField, StructType, Timestam
 import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.log4j.{Level, LogManager, Logger}
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{DataFrame, Row, SparkSession}
+import org.apache.spark.sql.{DataFrame, Row, SaveMode, SparkSession}
 
 import java.nio.file.{FileSystems, Files}
 
 // deprecated in scala 2.13
 // use import scala.jdk.CollectionConverters._
 import scala.collection.JavaConverters._
-//import scala.jdk.CollectionConverters._
 
 object Utils {
 
@@ -35,16 +34,29 @@ object Utils {
       )
       .filter(_.endsWith(".csv")).toSeq
 
-    //dir_list.foreach(println)
+    println(s"Files read from directory $dir: \n")
+    dir_list.foreach(println)
 
     dir_list
   }
 
   def getFullLoadObj(file: String): File = {
     var obj: File = NullFile
-    full_load_obj_lst.foreach( x => if (file == x.file) obj = x )
+
+    for (elem <- full_load_obj_lst)
+      if (elem.file == file )
+        obj = elem
 
     obj
+  }
+
+  def writeParquetTable(df: DataFrame, table: String): Unit = {
+    println(s"Writing df into parquet table $table")
+    df.coalesce(10)
+      .write
+      .format("parquet")
+      .mode(SaveMode.Overwrite)
+      .insertInto(table)
   }
 
   def GetSchema(file: String): StructType = {
@@ -86,7 +98,7 @@ object Utils {
       .filter(!_.endsWith("="))
 
     if (prop_lst.isEmpty) {
-      println("Properties file have no admisible values or is empty\n")
+      println("Properties file have no admissible values or is empty\n")
       sys.exit(1)
     }
 
@@ -126,15 +138,5 @@ object Utils {
 
   def IsEmptyDF(df: DataFrame): Boolean = {
     df.rdd.isEmpty()
-  }
-
-  def create_table(data: Map[String,String])(implicit spark: SparkSession): Unit = {
-    spark.sql(
-      s"""
-         | CREATE TABLE ${data("database")}.${data("table")}
-         | ${Actor.cmp_select}
-         | LOCATION ${data("db_location")}.${data("table").toLowerCase()}
-         |""".stripMargin
-    )
   }
 }

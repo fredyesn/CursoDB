@@ -3,7 +3,10 @@ package com.nova.project_fredy.FullLoadFiles
 import org.apache.spark.sql.types.{DecimalType, DoubleType, IntegerType, StringType, StructField, StructType, TimestampType}
 
 object Film extends File {
-  val name = "film"
+  val name = "Film"
+  val file: String = s"$name.csv".toLowerCase
+  val land_table: String = s"land_proj.$name".toLowerCase
+  val business_table: String = s"bu_proj.$name".toLowerCase
   val flg_part: Boolean = false
 
   val schema: StructType = StructType( Array(
@@ -21,21 +24,4 @@ object Film extends File {
     StructField("special_features",StringType,nullable = true),
     StructField("fulltext",StringType,nullable = true)
   ))
-
-  val cmp_select: String =
-    s"""
-       | film_id INTEGER,
-       | title STRING,
-       | description STRING,
-       | release_year INTEGER,
-       | language_id INTEGER,
-       | rental_duration INTEGER,
-       | rental_rate DECIMAL(7,2),
-       | length INTEGER,
-       | replacement_cost DECIMAL(10,2),
-       | rating STRING,
-       | last_update STRING,
-       | special_features STRING,
-       | fulltext STRING
-       |""".stripMargin
 }

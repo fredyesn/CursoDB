@@ -15,7 +15,7 @@ object Common {
       return
     }
 
-    println(s"Creating table $table")
+    println(s"Creating parquet table: $table")
     catalog.createTable(table, "parquet", schema, options)
   }
 }

@@ -4,10 +4,9 @@ import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructT
 
 trait File {
   val name: String
-  val file: String = s"$name.csv"
-  val land_table: String = s"land_proj.$name"
-  val business_table: String = s"bu_proj.$name"
+  val file: String
+  val land_table: String
+  val business_table: String
   val flg_part: Boolean
   val schema: StructType
-  val cmp_select: String
 }

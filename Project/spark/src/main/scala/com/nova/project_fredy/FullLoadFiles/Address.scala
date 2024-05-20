@@ -3,7 +3,10 @@ package com.nova.project_fredy.FullLoadFiles
 import org.apache.spark.sql.types.{IntegerType, LongType, StringType, StructField, StructType, TimestampType}
 
 object Address extends File {
-  val name = "address"
+  val name = "Address"
+  val file: String = s"$name.csv".toLowerCase
+  val land_table: String = s"land_proj.$name".toLowerCase
+  val business_table: String = s"bu_proj.$name".toLowerCase
   val flg_part: Boolean = false
 
   val schema: StructType = StructType( Array(
@@ -16,16 +19,4 @@ object Address extends File {
     StructField("phone",LongType,nullable = true),
     StructField("last_update",TimestampType,nullable = true)
   ))
-
-  val cmp_select: String =
-    s"""
-       | address_id INTEGER,
-       | address STRING,
-       | address2 STRING,
-       | district STRING,
-       | city_id INTEGER,
-       | postal_code STRING,
-       | phone BIGINT,
-       | last_update STRING
-       |""".stripMargin
 }

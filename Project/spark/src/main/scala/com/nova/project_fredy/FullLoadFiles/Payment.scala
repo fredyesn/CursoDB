@@ -3,7 +3,10 @@ package com.nova.project_fredy.FullLoadFiles
 import org.apache.spark.sql.types.{DecimalType, IntegerType, StructField, StructType, TimestampType}
 
 object Payment extends File {
-  val name = "payment"
+  val name = "Payment"
+  val file: String = s"$name.csv".toLowerCase
+  val land_table: String = s"land_proj.$name".toLowerCase
+  val business_table: String = s"bu_proj.$name".toLowerCase
   val flg_part: Boolean = false
 
   val schema: StructType = StructType( Array(
@@ -14,14 +17,4 @@ object Payment extends File {
     StructField("amount",DecimalType(10,2),nullable = true),
     StructField("payment_date",TimestampType,nullable = true)
   ))
-
-  val cmp_select: String =
-    s"""
-       | payment_id INTEGER,
-       | customer_id INTEGER,
-       | staff_id INTEGER,
-       | rental_id INTEGER,
-       | amount DECIMAL(10,2),
-       | payment_date STRING
-       |""".stripMargin
 }
