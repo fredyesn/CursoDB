@@ -2,7 +2,7 @@ package com.nova.project_fredy
 
 import org.apache.spark.sql.SparkSession
 
-object DailyLoad {
+object ExecuteDailyLoad {
   def run(cfg: Map[String,String])(implicit spark: SparkSession): Unit = {
     println("\n***********************************")
     println("**                               **")

@@ -10,12 +10,14 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, Row, SaveMode, SparkSession}
 
 import java.nio.file.{FileSystems, Files}
+import java.text.SimpleDateFormat
 
 // deprecated in scala 2.13
 // use import scala.jdk.CollectionConverters._
 import scala.collection.JavaConverters._
 
 object Utils {
+  def findTimeStamp(): String = new SimpleDateFormat("yyyyMMddHHmmss").toString
 
   def initializeLOG(LogLevel: Level): Logger = {
     // LOGS
@@ -61,21 +63,21 @@ object Utils {
 
   def GetSchema(file: String): StructType = {
     file match {
-      case Actor.file => Actor.schema
-      case Address.file => Address.schema
-      case Category.file => Category.schema
-      case City.file => City.schema
-      case Country.file => Country.schema
-      case Customer.file => Customer.schema
-      case Film.file => Film.schema
-      case FilmActor.file => FilmActor.schema
-      case FilmCategory.file => FilmCategory.schema
-      case Inventory.file => Inventory.schema
-      case Languaje.file => Languaje.schema
-      case Payment.file => Payment.schema
-      case Rental.file => Rental.schema
-      case Staff.file => Staff.schema
-      case Store.file => Store.schema
+      case Actor.file => Actor.fl_schema
+      case Address.file => Address.fl_schema
+      case Category.file => Category.fl_schema
+      case City.file => City.fl_schema
+      case Country.file => Country.fl_schema
+      case Customer.file => Customer.fl_schema
+      case Film.file => Film.fl_schema
+      case FilmActor.file => FilmActor.fl_schema
+      case FilmCategory.file => FilmCategory.fl_schema
+      case Inventory.file => Inventory.fl_schema
+      case Languaje.file => Languaje.fl_schema
+      case Payment.file => Payment.fl_schema
+      case Rental.file => Rental.fl_schema
+      case Staff.file => Staff.fl_schema
+      case Store.file => Store.fl_schema
       case _ => StructType(Array(StructField("",StringType)))
     }
   }
@@ -95,7 +97,8 @@ object Utils {
 
     // reading and filtering the properties file
     val prop_lst = sc.textFile(path.toString).collect().toSeq
-      .filter(!_.endsWith("="))
+      .filter(findVar(_).nonEmpty)
+      .filter(findValue(_).nonEmpty)
 
     if (prop_lst.isEmpty) {
       println("Properties file have no admissible values or is empty\n")
@@ -104,12 +107,16 @@ object Utils {
 
     val map: Map[String,String] = prop_lst.map(
       x => {
-        x.split("=")(0).trim() -> x.substring(x.split("=")(0).length + 1).trim()
+        findVar(x) -> findValue(x)
       }
     ).toMap
 
     map
   }
+
+  private def findVar(str: String): String = str.split("=").head.trim()
+
+  private def findValue(str: String): String = str.split("=").tail.mkString("=").trim()
 
   def read_csv(dir: String, file: String, schema: StructType)(implicit spark: SparkSession): DataFrame = {
     try{
@@ -138,5 +145,44 @@ object Utils {
 
   def IsEmptyDF(df: DataFrame): Boolean = {
     df.rdd.isEmpty()
+  }
+
+  def lanzador(executionType: String, cfg: Map[String, String])(implicit spark: SparkSession): Unit = {
+    try{
+      executionType match {
+        case "FullLoad" => ExecuteFullLoad.run(cfg)
+        case "DailyLoad" => ExecuteDailyLoad.run(cfg)
+        case "MonthlyLoad" => ExecuteMonthlyLoad.run(cfg)
+        case _ => println("Process not implemented yet.")
+      }
+    } catch {
+      case e: Exception =>
+        LOG.error(s"ERROR: EXECUTION $executionType FAILED !\n")
+        LOG.error(s"ERROR: ${e.getMessage}")
+
+        throw e
+    }
+  }
+
+  def lanzador0(executionType: String, cfg: Map[String, String])(implicit spark: SparkSession): Unit = {
+    val executionMap: Map[String, Any] = Map(
+      "FullLoad" -> ExecuteFullLoad.run(cfg),
+      "DailyLoad" -> ExecuteDailyLoad.run(cfg),
+      "MonthlyLoad" -> ExecuteMonthlyLoad.run(cfg)
+    )
+
+    if (executionMap.contains(executionType)) {
+      try {
+        executionMap(executionType)
+      } catch {
+        case e: Exception =>
+          LOG.error(s"ERROR: EXECUTION $executionType FAILED !\n")
+          LOG.error(s"ERROR: ${e.getMessage}")
+
+          throw e
+      }
+    } else {
+      println("Process not implemented yet.")
+    }
   }
 }

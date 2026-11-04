@@ -8,5 +8,5 @@ object NullFile extends File {
   val land_table: String = s"land_proj.$name"
   val business_table: String = s"bu_proj.$name"
   val flg_part: Boolean = false
-  val schema: StructType = StructType(Array(StructField("",IntegerType,nullable = true)))
+  val fl_schema: StructType = StructType(Array(StructField("",IntegerType,nullable = true)))
 }

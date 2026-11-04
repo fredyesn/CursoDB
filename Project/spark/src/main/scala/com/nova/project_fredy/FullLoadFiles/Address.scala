@@ -9,8 +9,8 @@ object Address extends File {
   val business_table: String = business_table(name)
   val flg_part: Boolean = false
 
-  val schema: StructType = StructType( Array(
-    StructField("address_id",IntegerType,nullable = true),
+  val fl_schema: StructType = StructType( Array(
+    StructField("address_id",IntegerType,nullable = false),
     StructField("address",StringType,nullable = true),
     StructField("address2",StringType,nullable = true),
     StructField("district",StringType,nullable = true),

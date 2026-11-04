@@ -9,7 +9,7 @@ object City extends File {
   val business_table: String = business_table(name)
   val flg_part: Boolean = false
 
-  val schema: StructType = StructType( Array(
+  val fl_schema: StructType = StructType( Array(
     StructField("city_id",IntegerType,nullable = true),
     StructField("city",StringType,nullable = true),
     StructField("country_id",IntegerType,nullable = true),

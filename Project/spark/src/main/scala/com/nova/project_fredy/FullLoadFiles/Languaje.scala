@@ -9,7 +9,7 @@ object Languaje extends File {
   val business_table: String = business_table(name)
   val flg_part: Boolean = false
 
-  val schema: StructType = StructType( Array(
+  val fl_schema: StructType = StructType( Array(
     StructField("language_id",IntegerType,nullable = true),
     StructField("name",StringType,nullable = true),
     StructField("last_update",TimestampType,nullable = true)

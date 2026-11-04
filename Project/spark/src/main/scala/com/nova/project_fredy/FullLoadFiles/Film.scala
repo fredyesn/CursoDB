@@ -9,7 +9,7 @@ object Film extends File {
   val business_table: String = business_table(name)
   val flg_part: Boolean = false
 
-  val schema: StructType = StructType( Array(
+  val fl_schema: StructType = StructType( Array(
     StructField("film_id",IntegerType,nullable = true),
     StructField("title",StringType,nullable = true),
     StructField("description",StringType,nullable = true),

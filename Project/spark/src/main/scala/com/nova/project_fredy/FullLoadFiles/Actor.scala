@@ -9,8 +9,9 @@ object Actor extends File {
   val business_table: String = business_table(name)
   val flg_part: Boolean = false
 
-  val schema: StructType = StructType( Array(
-    StructField("actor_id",IntegerType,nullable = true),
+
+  val fl_schema: StructType = StructType( Array(
+    StructField("actor_id",IntegerType,nullable = false),
     StructField("first_name",StringType,nullable = true),
     StructField("last_name",StringType,nullable = true),
     StructField("last_update",TimestampType,nullable = true)

@@ -9,7 +9,7 @@ object Store extends File {
   val business_table: String = business_table(name)
   val flg_part: Boolean = false
 
-  val schema: StructType = StructType( Array(
+  val fl_schema: StructType = StructType( Array(
     StructField("store_id",IntegerType,nullable = true),
     StructField("manager_staff_id",IntegerType,nullable = true),
     StructField("address_id",IntegerType,nullable = true),

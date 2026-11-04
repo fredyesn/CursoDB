@@ -1,6 +1,6 @@
 package com.nova.project_fredy.FullLoadFiles
 
-import org.apache.spark.sql.types.{IntegerType, StructField, StructType, TimestampType}
+import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructType, TimestampType}
 
 object Inventory extends File {
   val name = "Inventory"
@@ -9,10 +9,11 @@ object Inventory extends File {
   val business_table: String = business_table(name)
   val flg_part: Boolean = false
 
-  val schema: StructType = StructType( Array(
-    StructField("inventory_id",IntegerType,nullable = true),
-    StructField("film_id",IntegerType,nullable = true),
-    StructField("store_id",IntegerType,nullable = true),
-    StructField("last_update",TimestampType,nullable = true)
+  val fl_schema: StructType = StructType( Array(
+    StructField("inventory_id",IntegerType,nullable = false),
+    StructField("film_id",IntegerType,nullable = false),
+    StructField("store_id",IntegerType,nullable = false),
+    StructField("last_update",TimestampType,nullable = true),
+    StructField("data_date_part",StringType,nullable = false)
   ))
 }

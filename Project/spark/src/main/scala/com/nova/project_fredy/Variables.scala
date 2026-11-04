@@ -20,4 +20,16 @@ object Variables {
     Staff,
     Store
   )
+
+  val table = "exp_table"
+
+
+  val businessDB = "bu_exproject"
+  val unidad = "PHI"
+
+  val query = s"SELECT * FROM $businessDB.${Variables.table} where unidad = '$unidad '"
+
+
+
+
 }
